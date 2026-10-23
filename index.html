@@ -63,6 +63,7 @@
  },
  "foundingDate": "2022-01",
  "acceptsReservations": false,
+ "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "opens": "11:00", "closes": "20:00"}],
  "subjectOf": {
   "@type": "NewsArticle",
   "headline": "Looking for your new favorite cheeseburger? It’s in Redlands",
@@ -379,6 +380,22 @@
  "@context": "https://schema.org",
  "@type": "FAQPage",
  "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "What are your hours?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "We're open every day from 11 AM to 8 PM. Holiday hours may vary, so call (909) 735-5400 if you're not sure."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Do you have a happy hour?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. Happy hour runs Monday through Thursday from 3 to 5 PM. Ask at the counter or call (909) 735-5400 for this week's specials."
+   }
+  },
   {
    "@type": "Question",
    "name": "Where is The Jerk Grill, and where do I park?",
@@ -709,6 +726,42 @@ footer .brand{color:var(--coco);margin-bottom:16px}
 
 .dock{display:none}
 
+/* Section tabs: side rail (desktop) / swipe strip (phones) */
+.tabs{position:fixed;z-index:45;display:flex;gap:6px}
+.tabs a{display:flex;align-items:center;gap:9px;text-decoration:none;font:600 .78rem/1 var(--display);letter-spacing:.04em;color:var(--coco);white-space:nowrap}
+.tabs a i{flex:none;width:9px;height:9px;border-radius:50%;background:rgba(247,239,225,.45);box-shadow:0 0 0 3px rgba(20,13,8,.35);transition:transform .25s var(--ease),background .25s}
+.tabs a.on i{background:var(--bonnet);transform:scale(1.35)}
+@media (min-width:1021px){
+  .tabs{right:18px;top:50%;transform:translateY(-50%);flex-direction:column;align-items:flex-end;padding:10px 8px;border-radius:999px}
+  .tabs a{flex-direction:row-reverse;padding:7px 4px}
+  .tabs a span{background:rgba(20,13,8,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:.5em .85em;border-radius:999px;opacity:0;transform:translateX(8px);transition:opacity .2s,transform .2s;pointer-events:none}
+  .tabs:hover a span,.tabs a.on span,.tabs a:focus-visible span{opacity:1;transform:none}
+  .tabs a.on span{background:var(--bonnet);color:var(--night)}
+}
+@media (min-width:1360px){
+  .tabs a span{opacity:1;transform:none;background:rgba(20,13,8,.72);color:rgba(247,239,225,.85)}
+  .tabs a:hover span{background:rgba(20,13,8,.92);color:var(--coco)}
+}
+@media (max-width:1020px){
+  .tabs{left:0;right:0;top:76px;padding:8px 12px;overflow-x:auto;scrollbar-width:none;background:rgba(20,13,8,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(247,239,225,.08);transform:translate3d(0,-130%,0);transition:transform .35s var(--ease)}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs.show{transform:none}
+  .tabs a{padding:.6em 1em;border-radius:999px;background:rgba(247,239,225,.08)}
+  .tabs a i{display:none}
+  .tabs a.on{background:var(--bonnet);color:var(--night)}
+  html{scroll-padding-top:128px}
+}
+@media (max-width:680px){.tabs{top:70px}}
+
+/* Hours details */
+.status-pill{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:.45em .9em;border-radius:999px;background:rgba(20,13,8,.1);font-weight:700;font-size:.92rem}
+.status-pill::before,.proof .js-status::before{content:"";width:8px;height:8px;border-radius:50%;background:#8a7a68}
+.js-status.open::before{background:var(--callaloo)}
+.hh-line{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline;font-size:1.05rem}
+.hh-line b{background:var(--night);color:var(--bonnet);padding:.3em .7em;border-radius:8px;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase}
+.hh-chip{display:inline-block;margin-top:12px;background:var(--bonnet);color:var(--night);font-weight:700;font-size:.85rem;padding:.5em .9em;border-radius:999px}
+.big-time{font-size:clamp(3rem,7vw,5.2rem)!important}
+
 /* Reveal */
 .rv{opacity:0;transform:translate3d(0,36px,0);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .rv.in{opacity:1;transform:none}
@@ -769,6 +822,8 @@ footer .brand{color:var(--coco);margin-bottom:16px}
 .preview-bar i{width:7px;height:7px;border-radius:50%;background:var(--ember);font-style:normal}
 .hdr{top:28px}
 html{scroll-padding-top:104px}
+@media (max-width:1020px){.tabs{top:104px}html{scroll-padding-top:156px}}
+@media (max-width:680px){.tabs{top:98px}}
 </style>
 </head>
 <body>
@@ -806,6 +861,15 @@ html{scroll-padding-top:104px}
   </div>
 </header>
 
+<nav class="tabs" id="tabs" aria-label="Page sections">
+  <a href="#top" data-sec="top"><i></i><span>Home</span></a>
+  <a href="#about" data-sec="about"><i></i><span>About</span></a>
+  <a href="#menu" data-sec="menu"><i></i><span>Menu</span></a>
+  <a href="#reviews" data-sec="reviews"><i></i><span>Reviews</span></a>
+  <a href="#faq" data-sec="faq"><i></i><span>FAQ</span></a>
+  <a href="#visit" data-sec="visit"><i></i><span>Visit</span></a>
+</nav>
+
 <main id="main">
 <!-- ===================== HERO ===================== -->
 <section class="hero" id="top" data-parallax aria-label="Welcome">
@@ -829,6 +893,7 @@ html{scroll-padding-top:104px}
       </div>
       <div class="proof rv d3">
         <span><span class="star" aria-hidden="true">★★★★</span><b>4.1</b>&nbsp;on Google · 430 reviews</span>
+        <span class="js-status">Open daily 11 AM–8 PM</span>
         <span>$10–20 per person</span>
         <a class="press-pill" href="https://www.latimes.com/food/story/2024-05-06/jamaican-oxtail-burgers-redlands-column" target="_blank" rel="noopener">As featured in the&nbsp;<b>Los Angeles Times</b></a>
       </div>
@@ -897,7 +962,7 @@ html{scroll-padding-top:104px}
         <span class="kicker rv">The menu</span>
         <h2 class="rv d1">Off the grill,<br><span class="it">out the pot.</span></h2>
       </div>
-      <p class="rv d2">Our most-ordered plates, straight from the kitchen. Tap any dish to order it for pickup.</p>
+      <div class="rv d2"><p>Our most-ordered plates, straight from the kitchen. Tap any dish to order it for pickup.</p><span class="hh-chip">Happy hour · Mon–Thu · 3–5 PM</span></div>
     </div>
 
     <div class="sig">
@@ -1039,6 +1104,8 @@ html{scroll-padding-top:104px}
       <h2 class="rv d1">Questions, <span class="it">answered.</span></h2>
     </div>
     <div class="faq-list">
+      <details class="faq-item rv"><summary>What are your hours?</summary><p>We're open every day from 11 AM to 8 PM. Holiday hours may vary, so call <a href="tel:+19097355400">(909) 735-5400</a> if you're not sure.</p></details>
+      <details class="faq-item rv"><summary>Do you have a happy hour?</summary><p>Yes. Happy hour runs Monday through Thursday from 3 to 5 PM. Ask at the counter or call <a href="tel:+19097355400">(909) 735-5400</a> for this week's specials.</p></details>
       <details class="faq-item rv"><summary>Where is The Jerk Grill, and where do I park?</summary><p>We're at 1560 Barton Rd, Floor 1, in Brookside Plaza in Redlands, CA 92373, with parking in the shopping center lot. It gets busy around lunch and dinner, so ordering online ahead of time makes pickup quick.</p></details>
       <details class="faq-item rv"><summary>Who owns The Jerk Grill?</summary><p>The Jerk Grill is Black-owned. Chef-owner Lerone Mullin grew up in St. Mary Parish, Jamaica, started with brewery pop-ups in 2020, and opened the restaurant on Barton Road in January 2022.</p></details>
       <details class="faq-item rv"><summary>What should I order on my first visit?</summary><p>Most first-timers go for the Oxtail Smash Burger Meal, the dish the Los Angeles Times featured, or a Meal Combo with your choice of protein, rice, two sides and a drink. Add a Jamaican patty or festival on the side.</p></details>
@@ -1064,11 +1131,12 @@ html{scroll-padding-top:104px}
     </div>
     <div class="card when rv d1">
       <span class="kicker">Hours</span>
-      <div class="big-time"><small>Doors open at</small>11 AM</div>
-      <p>Hours can change on holidays. Check today's hours on Google before you head over.</p>
+      <div class="big-time"><small>Open every day</small>11 AM–8 PM</div>
+      <span class="status-pill js-status">Hours</span>
+      <div class="hh-line"><b>Happy hour</b><span>Monday–Thursday, 3–5 PM</span></div>
+      <p>Holiday hours may vary. Give us a call if you're not sure.</p>
       <div class="actions">
-        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=The+Jerk+Grill+1560+Barton+Rd+Redlands+CA" target="_blank" rel="noopener">Today's Hours on Google</a>
-        <a class="btn ghost" href="tel:+19097355400"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call Us</a>
+        <a class="btn" href="tel:+19097355400"><svg aria-hidden="true"><use href="#i-phone"/></svg>Call (909) 735-5400</a>
       </div>
     </div>
     <a class="mapcard rv" href="https://www.google.com/maps/dir/?api=1&amp;destination=The+Jerk+Grill%2C+1560+Barton+Rd%2C+Redlands%2C+CA+92373" target="_blank" rel="noopener" aria-label="Open directions to 1560 Barton Rd in Google Maps">
@@ -1111,7 +1179,7 @@ html{scroll-padding-top:104px}
       <ul><li><a href="tel:+19097355400">(909) 735-5400</a></li><li><a href="https://the-jerk-grill.square.site">Order online</a></li><li><a href="https://www.thejerkgrill.com/shop/catering-menu/CUS73WJOVXVCFQ3SAI4TJEI4">Catering menu</a></li></ul></div>
     <div><h4>Explore</h4>
       <ul><li><a href="#about">About</a></li><li><a href="#menu">Menu</a></li><li><a href="#reviews">Reviews</a></li><li><a href="#faq">FAQ</a></li><li><a href="#visit">Hours &amp; location</a></li></ul></div>
-    <div class="fine"><span>© <span id="yr">2026</span> The Jerk Grill</span><span>Prices from our online menu and subject to change.</span></div>
+    <div class="fine"><span>© <span id="yr">2026</span> The Jerk Grill</span><span>Open daily 11 AM–8 PM · Happy hour Mon–Thu 3–5 PM · Prices subject to change</span></div>
   </div>
 </footer>
 
@@ -1164,6 +1232,28 @@ html{scroll-padding-top:104px}
   addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(parallax); } }, {passive:true});
   addEventListener('resize', parallax);
   parallax();
+
+  /* Section tabs: highlight the section in view; show the phone strip after the hero */
+  const tabs = document.getElementById('tabs');
+  const tabLinks = [...tabs.querySelectorAll('a')];
+  const secs = tabLinks.map(a => document.getElementById(a.dataset.sec)).filter(Boolean);
+  const setOn = id => tabLinks.forEach(a => {
+    const on = a.dataset.sec === id;
+    a.classList.toggle('on', on);
+    if (on) { a.setAttribute('aria-current', 'true'); if (tabs.scrollWidth > tabs.clientWidth) tabs.scrollTo({left: a.offsetLeft - tabs.clientWidth / 2 + a.clientWidth / 2, behavior: reduce ? 'auto' : 'smooth'}); }
+    else a.removeAttribute('aria-current');
+  });
+  const tabObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) setOn(e.target.id); }), {rootMargin: '-45% 0px -50% 0px'});
+  secs.forEach(sec => tabObs.observe(sec));
+  addEventListener('scroll', () => tabs.classList.toggle('show', scrollY > innerHeight * .6), {passive: true});
+
+  /* Open / closed status (restaurant time: America/Los_Angeles, open 11:00-20:00 daily) */
+  (() => {
+    const now = new Date(new Date().toLocaleString('en-US', {timeZone: 'America/Los_Angeles'}));
+    const mins = now.getHours() * 60 + now.getMinutes(), open = mins >= 660 && mins < 1200;
+    const label = open ? 'Open now · until 8 PM' : (mins < 660 ? 'Closed · opens 11 AM today' : 'Closed · opens 11 AM tomorrow');
+    document.querySelectorAll('.js-status').forEach(el => { el.textContent = label; el.classList.toggle('open', open); });
+  })();
 
   /* Ember particles: drift over the photos, pause off-screen / hidden tab */
   const c = document.getElementById('embers');
